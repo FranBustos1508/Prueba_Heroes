@@ -12,6 +12,7 @@
             <div class="col-10 col-md-12 mx=auto">
                 <div class="card">
                     <div class="card-body">
+                        <span id="loading-message">Loading...</span>
                         <div class="row">
                             <div class="col-6">
                                 <img id="image" src="" alt="" class="w-100">
@@ -22,6 +23,9 @@
                                 <h4 id="gender"></h4>
                             </div>
                         </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-danger" onclick="remove_character()">Remove</button>
                     </div>
                 </div>
             </div>
@@ -47,6 +51,10 @@
         }
 
         function parse_character(character){
+
+            const loading_message = document.getElementById("loading-message");
+            loading_message.remove();
+
             const name = document.getElementById("name");
             name.append(character.name);
             
@@ -56,13 +64,13 @@
             const alignment = document.getElementById("alignment");
             alignment.innerText = character.alignment;
             if( character.alignment === "good"){
-                alignment.setAttribute("class", "text-success");
+                alignment.classList.add("text-success");
             }
             else if(character.alignment === "bad"){
-                alignment.setAttribute("class", "text-danger");
+                alignment.classList.add("text-danger");
             }
             else{
-                alignment.setAttribute("class", "text-danger");
+                alignment.classList.add("text-warning");
             }
         }
 
@@ -75,6 +83,29 @@
             .then(res_receive_character)
             .then(parse_character)
             .catch(request_error)
+
+        function delete_response(data){
+            console.log(data);
+            if(data.success){ //data es un diccionario con clave success y valor true/false
+                alert("character removed successfully")
+                window.location.replace("/");
+            }
+            else{
+                alert("An error has ocurred. Try again")
+            }
+        }
+
+        function remove_character(){
+            const confirmation = confirm(`¿Quieres eliminar el héroe con id: ${id}`)
+            if(!confirmation){
+                return;
+            }
+            
+            fetch("http://localhost:5000/characters/" + id, { method: "DELETE" })
+                .then((res) => res.json())
+                .then(delete_response)
+                .catch(request_error)
+        }
     </script>
 </body>
 </html>
