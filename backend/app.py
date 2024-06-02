@@ -1,6 +1,6 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
-from db.characters import get_all_characters, get_character_by_id, remove_character
+from db.characters import get_all_characters, get_character_by_id, remove_character, add_character
 from time import sleep
 
 app = Flask(__name__)
@@ -18,3 +18,27 @@ def character_by_id(id):
 @app.route("/characters/<id>", methods = ["DELETE"])
 def remove_character_by_id(id):
     return {"success": remove_character(id)}
+
+@app.route("/characters", methods = ["POST"])
+def create_character():
+    name = request.json.get("name")
+    names = request.json.get("names")
+    publisher = request.json.get("publisher")
+    gender = request.json.get("gender")
+    alignment = request.json.get("alignment")
+    image = request.json.get("image")
+    race = request.json.get("race")
+
+    id = int(get_all_characters()[-1]["id"]) + 1
+
+    character = {
+        "id": id,
+        "name": name,
+        "names": names,
+        "publisher": publisher,
+        "gender": gender,
+        "alignment": alignment,
+        "image": image,
+        "race": race
+    }
+    return {"success": add_character(character), "id": id}
