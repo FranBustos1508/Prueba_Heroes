@@ -9,7 +9,7 @@
 <body data-bs-theme="dark">
     <div class="container mt-4">
         <div class="row">
-            <div class="col-10 col-md-12 mx=auto">
+            <div class="col-10 col-md-12 mx-auto">
                 <div class="card">
                     <div class="card-body">
                         <span id="loading-message">Loading...</span>
@@ -24,7 +24,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="http://localhost:8000" class="btn btn-warning">Back</a>
                         <button class="btn btn-danger" onclick="remove_character()">Remove</button>
                     </div>
                 </div>
@@ -60,6 +61,7 @@
             
             const image = document.getElementById("image");
             image.setAttribute("src", character.image);
+            image.setAttribute("class", "img-thumbnail");
             
             const alignment = document.getElementById("alignment");
             alignment.innerText = character.alignment;
