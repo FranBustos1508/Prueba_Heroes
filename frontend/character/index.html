@@ -9,23 +9,37 @@
 <body data-bs-theme="dark">
     <div class="container mt-4">
         <div class="row">
-            <div class="col-10 col-md-12 mx-auto">
+            <div class="col-12 col-md-8 mx-auto">
                 <div class="card">
                     <div class="card-body">
                         <span id="loading-message">Loading...</span>
                         <div class="row">
-                            <div class="col-6">
-                                <img id="image" src="" alt="" class="w-100">
+                            <div class="col-6 my-auto mx-auto">
+                                <img id="image" src="" alt="" class="img-fluid">
                             </div>
-                            <div class="col-6">
+                            <div class="col-4 my-auto mx-auto text-center">
                                 <h2 id="name"></h2>
-                                <h4 id="alignment"></h4>
-                                <h4 id="gender"></h4>
+                                <br>
+                                <h5>Alternative Names:</h5>
+                                <ul id="alt-names" class="list-unstyled d-flex flex-column align-items-center"></ul>
+                                <br>
+                                <h5>Alignment:</h5>
+                                <h6 id="alignment"></h6>
+                                <br>
+                                <h5>Gender:</h5>
+                                <h6 id="gender"></h6>
+                                <br>
+                                <h5>Publisher:</h5>
+                                <h6 id="publisher"></h6>
+                                <br>
+                                <h5>Race:</h5>
+                                <h6 id="race"></h6>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <a href="http://localhost:8000" class="btn btn-warning">Back</a>
+                        <a id="edit-btn" href="/character/edit" class="btn btn-info">Edit</a>
                         <button class="btn btn-danger" onclick="remove_character()">Remove</button>
                     </div>
                 </div>
@@ -46,6 +60,8 @@
         if(id==null) {
             window.location.replace("/");
         }
+
+        document.getElementById("edit-btn").setAttribute("href", `/character/edit?id=${id}`)
 
         function res_receive_character(response){
             return response.json();
@@ -74,6 +90,24 @@
             else{
                 alignment.classList.add("text-warning");
             }
+
+            const namelist = character.names.split(",");
+            const names = document.getElementById("alt-names");
+            for(let index = 0; index < namelist.length; index++){
+                const element = document.createElement("li");
+                element.innerText = namelist[index];
+                names.append(element);
+            }
+
+            const gender = document.getElementById("gender");
+            gender.textContent = character.gender;
+
+            const publisher = document.getElementById("publisher");
+            publisher.textContent = character.publisher;
+
+            const race = document.getElementById("race");
+            race.textContent = character.race;
+
         }
 
         function request_error(error){
